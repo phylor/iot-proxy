@@ -1,8 +1,8 @@
-# IOT-Proxy
+# IoT-Proxy
 
 This is an internet of things proxy. It's purpose is to collect multiple HTTP sources at one place. It supports HTTP/HTTPS and authentication mechanisms.
 
-The proxy allows you to have all your IOT sources reachable at one central domain. It also solves CORS problems and mixed HTTP/HTTPS problems.
+The proxy allows you to have all your IoT sources reachable at one central domain. It also solves CORS problems and mixed HTTP/HTTPS problems.
 
 ## Features
 
