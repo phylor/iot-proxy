@@ -1,4 +1,4 @@
 certs
 node_modules
-server.json
-services.json
+conf
+*.swp

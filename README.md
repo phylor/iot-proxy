@@ -58,6 +58,11 @@ Basic server settings can be configured in `server.json`. Configuration of the d
       }
     ]
 
+## Running it
+
+    npm install
+    node index.js
+
 ## Supported Authentication Mechanisms
 
 - SSL client certificates
