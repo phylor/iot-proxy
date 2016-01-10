@@ -7,53 +7,50 @@ The proxy allows you to have all your IoT sources reachable at one central domai
 ## Features
 
 - Proxy HTTP requests
-- Proxy HTTPS requests
-- Proxying supports SSL client certificates, basic and digest authentication
-- Rewrite relative HTML/CSS/JS URLs to absolute URLs
 
 ## Configuration
 
-Basic server settings can be configured in `server.json`. Configuration of the different IOT-sources is done in the JSON configuration file called `services.json`.
+Basic server settings can be configured in `conf/server.json`. Configuration of the different IoT-sources is done in the JSON configuration file called `conf/services.json`.
 
 ### Basic Server Setup
+
+Currently only either HTTP or HTTPS is supported (not simultaneously). The server can be strengthened with SSL client certificates.
 
     {
       "listen": {
         "http": true,
-        "https": true,
+        "https": false,
       },
       "authentication": {
         "ssl": {
-        },
-        "basic": {},
-        "digest": {}
+          "server_key": "certs/server.key",
+          "server_certificate": "certs/server.cer",
+          "ca_certificate": "certs/ca.cer"
+        }
       }
     }
 
 ### Service Setup
 
+If `disable_cache` is set to `true`, the current time is added to the URL so that the requests are not cached.
+
     [
       {
-        "endpoint": "/weather",
+        "endpoint": {
+          "url": "/weather",
+          "disable_cache": false
+        },
         "source": {
           "url": "http://weather.com/NewYork.json",
-          "method": "POST",
-          "data": {
-            "longitude": 10.3,
-            "latitude": 4.3
-          }
         }
       },
       {
-        "endpoint": "/webcam",
+        "endpoint": {
+          "url": "/webcam",
+          "disable_cache": true
+        },
         "source": {
-          "url": "https://iot1.example.com/image.jpg",
-          "method": "GET"
-        }
-        "ssl": {
-          "client_certificate": "certs/webcam.cer",
-          "client_key": "certs/webcam.key",
-          "ca_certificate": "certs/ca.cer"
+          "url": "https://iot1.example.com/image.jpg"
         }
       }
     ]
@@ -62,12 +59,6 @@ Basic server settings can be configured in `server.json`. Configuration of the d
 
     npm install
     node index.js
-
-## Supported Authentication Mechanisms
-
-- SSL client certificates
-- Basic authentication
-- Digest authentication
 
 ## Implementation Details
 
