@@ -60,6 +60,10 @@ If `disable_cache` is set to `true`, the current time is added to the URL so tha
     npm install
     node index.js
 
-## Implementation Details
+## Development
 
 The HTTP server is implemented using `node.js`.
+
+Required setup:
+
+    npm install -g mocha
