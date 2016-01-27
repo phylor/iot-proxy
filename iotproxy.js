@@ -1,12 +1,11 @@
 var fs = require('fs');
 var http = require('http');
-var httpProxy = require('http-proxy');
 var async = require('async');
 var https = require('https');
+var serviceRouter = require('./lib/ServiceRouter');
 
 exports = module.exports = {};
 
-var services = []
 
 var server;
 
@@ -20,7 +19,7 @@ fs.readFile('conf/services.json', {encoding:'utf-8'}, function(error, data) {
 
 	var jsonData = JSON.parse(data);
 	async.each(jsonData, function(service, callback) {
-    services.push(service)
+    serviceRouter.addService(service);
 
     console.log("Registering " + service.endpoint.url + " to source " + service.source.url);
 
@@ -42,7 +41,7 @@ fs.readFile('conf/services.json', {encoding:'utf-8'}, function(error, data) {
       };
   
       server = https.createServer(options, function(req, res) {
-        route(req, res)
+        serviceRouter.route(req, res)
       })
 
       var port = serverConfig.listen.https.port
@@ -55,7 +54,7 @@ fs.readFile('conf/services.json', {encoding:'utf-8'}, function(error, data) {
     }
     else {
       server = http.createServer(function(req, res) {
-        route(req, res)
+        serviceRouter.route(req, res)
       });
 
       var port = serverConfig.listen.http.port
@@ -69,46 +68,4 @@ fs.readFile('conf/services.json', {encoding:'utf-8'}, function(error, data) {
     }
   })
 });
-
-function route(req, res) {
-  try {
-    var proxy = httpProxy.createProxyServer({})
-  
-    proxy.on('error', function(e) {
-      console.log('Failed to proxy request: ' + e);
-    });
-
-    var proxyFound = false
-
-    async.each(services, function(service, callback) {
-      console.log('Checking service ' + service.endpoint.url + ' against ' + req.url);
-      if(service.endpoint.url === req.url) {
-
-        if(service.endpoint.disable_cache)
-          service.source.url += '?t=' + new Date().getTime()
-
-        req.url = service.source.url
-        proxy.web(req, res, { 
-          target: service.source.url,
-          prependPath: false,
-          changeOrigin: true
-        });
-        proxyFound = true
-      }
-
-      callback()
-    })
-
-    proxy.close();
-
-    if(!proxyFound) {
-      res.writeHead(404, {'Content-Type': 'text/plain'})
-      res.write('404')
-      res.end()
-    }
-  }
-  catch(err) {
-    console.log(err);
-  }
-}
 }

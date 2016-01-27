@@ -1,3 +1,3 @@
-var iotproxy = request('iotproxy');
+var iotproxy = require('./iotproxy');
 
-iotproxy.start();
+iotproxy.start(function() {});

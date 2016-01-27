@@ -67,3 +67,7 @@ The HTTP server is implemented using `node.js`.
 Required setup:
 
     npm install -g mocha
+
+Run tests:
+
+  mocha
