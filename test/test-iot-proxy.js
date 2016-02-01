@@ -57,5 +57,14 @@ describe("iot-proxy", function() {
           done();
         });
     });
+
+    it('should return a response for a GET request having parameters', function(done) {
+      app.get('/weather/zurich/forecast?days=5&start=today')
+        .end(function(err, res) {
+          res.should.have.status(200);
+          expect(res.body.message).to.equal('Forecast for Zurich, 5 days starting today');
+          done();
+        });
+    });
   });
 });
