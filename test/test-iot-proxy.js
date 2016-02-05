@@ -121,5 +121,24 @@ describe("iot-proxy", function() {
             });
         });
     });
+
+    it('should make different requests when disable_cache is set, even with basic authentication', function(done) {
+      app.get('/basic_auth_request_disable_cache')
+        .end(function(err, res) {
+          res.should.have.status(200);
+
+          var firstResponse = res.body.message;
+
+          app.get('/basic_auth_request_disable_cache')
+            .end(function(err, res) {
+              res.should.have.status(200);
+
+              var secondResponse = res.body.message;
+
+              expect(firstResponse).to.not.equal(secondResponse);
+              done();
+            });
+        });
+    });
   });
 });
