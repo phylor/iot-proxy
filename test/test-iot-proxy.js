@@ -68,12 +68,21 @@ describe("iot-proxy", function() {
     });
 
     it('should make a POST request if specified', function(done) {
-      app.post('/post_request')
+      app.get('/post_request')
         .end(function(err, res) {
           res.should.have.status(200);
-          expect(res.body.message).to.equal('POST request answer');
+          expect(res.body.message).to.equal('POST request answer.');
           done();
         });
+    });
+
+    it('should make a POST request if a POST request is made to the proxy server', function(done) {
+      app.post('/proxied_post_request')
+        .end(function(err, res) {
+          res.should.have.status(200);
+          expect(res.body.message).to.equal('POST request answer.');
+          done();
+      });
     });
 
     it('should be able to make digest authentication requests', function(done) {
