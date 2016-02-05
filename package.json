@@ -2,8 +2,11 @@
   "name": "iot-proxy",
   "version": "1.0.0",
   "dependencies": {
+    "async": "*",
     "http-proxy": "*",
-    "async": "*"
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0",
+    "request": "^2.69.0"
   },
   "devDependencies": {
     "chai": "^3.4.1",

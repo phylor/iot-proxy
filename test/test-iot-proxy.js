@@ -75,5 +75,14 @@ describe("iot-proxy", function() {
           done();
         });
     });
+
+    it('should be able to make digest authentication requests', function(done) {
+      app.get('/digest_auth_request')
+        .end(function(err, res) {
+          res.should.have.status(200);
+          expect(res.body.message).to.equal('Digest authentication succeeded.');
+          done();
+        });
+    });
   });
 });
