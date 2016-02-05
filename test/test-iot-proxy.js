@@ -98,7 +98,25 @@ describe("iot-proxy", function() {
       app.get('/basic_auth_request')
         .end(function(err, res) {
           res.should.have.status(200);
-          expect(res.body.message).to.equal('Basic authentication succeeded.');
+          expect(res.body.message).to.equal('Basic authentication with GET succeeded.');
+          done();
+        });
+    });
+
+    it('should be able to make basic authentication requests with proxied POST', function(done) {
+      app.post('/basic_auth_post_request')
+        .end(function(err, res) {
+          res.should.have.status(200);
+          expect(res.body.message).to.equal('Basic authentication with POST succeeded.');
+          done();
+        });
+    });
+
+    it('should be able to make basic authentication requests with configured POST', function(done) {
+      app.get('/basic_auth_forced_post_request')
+        .end(function(err, res) {
+          res.should.have.status(200);
+          expect(res.body.message).to.equal('Basic authentication with POST succeeded.');
           done();
         });
     });
