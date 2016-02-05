@@ -66,5 +66,14 @@ describe("iot-proxy", function() {
           done();
         });
     });
+
+    it('should make a POST request if specified', function(done) {
+      app.post('/post_request')
+        .end(function(err, res) {
+          res.should.have.status(200);
+          expect(res.body.message).to.equal('POST request answer');
+          done();
+        });
+    });
   });
 });
