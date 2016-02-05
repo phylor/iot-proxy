@@ -94,6 +94,15 @@ describe("iot-proxy", function() {
         });
     });
 
+    it('should be able to make basic authentication requests', function(done) {
+      app.get('/basic_auth_request')
+        .end(function(err, res) {
+          res.should.have.status(200);
+          expect(res.body.message).to.equal('Basic authentication succeeded.');
+          done();
+        });
+    });
+
     it('should make different requests when disable_cache is set', function(done) {
       app.get('/disable_cache')
         .end(function(err, res) {
