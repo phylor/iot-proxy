@@ -93,5 +93,24 @@ describe("iot-proxy", function() {
           done();
         });
     });
+
+    it('should make different requests when disable_cache is set', function(done) {
+      app.get('/disable_cache')
+        .end(function(err, res) {
+          res.should.have.status(200);
+
+          var firstResponse = res.body.message;
+
+          app.get('/disable_cache')
+            .end(function(err, res) {
+              res.should.have.status(200);
+
+              var secondResponse = res.body.message;
+
+              expect(firstResponse).to.not.equal(secondResponse);
+              done();
+            });
+        });
+    });
   });
 });
