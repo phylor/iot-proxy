@@ -1,12 +1,30 @@
 # IoT-Proxy
 
-This is an internet of things proxy. It's purpose is to collect multiple HTTP sources at one place. It supports HTTP/HTTPS and authentication mechanisms.
+This is an Internet of Things (IoT) proxy. It's purpose is to collect multiple HTTP sources at one place. It supports HTTP/HTTPS and authentication mechanisms.
 
-The proxy allows you to have all your IoT sources reachable at one central domain. It also solves CORS problems and mixed HTTP/HTTPS problems.
+The proxy lets you reach all IoT sources at one central domain and endpoint. It solves CORS and mixed HTTP/HTTPS problems when trying to access different IoT sources from a single application (e.g. from a dashboard).
+
+## Example
+
+Assume you have three IoT sources:
+
+- Camera image accessible at http://192.168.0.13/image.jpeg
+- Temperature sensor accessible at http://192.168.0.7/temperature.json
+- Weather information accessible at http://api.openweathermap.org/data/2.5/weather?q=London,uk
+
+With the IoT proxy you could map those sources to the following arbitrary URLs:
+
+- /camera
+- /temperature
+- /weather
+
+Calling a mapped URL has the same effect as calling the source URL above. Basic or digest authentication of the sources can be configured in the proxy. They are not proxied, i.e. the proxy can be secured with a single authentication scheme, even if the sources use different authentication schemes or no authentication at all.
 
 ## Features
 
-- Proxy HTTP requests
+- Choose URL endpoints for every connected IoT source
+- Supports HTTP sources without authentication, or with basic/digest authentication
+- Secure the proxy with authentication based on client certificates
 
 ## Configuration
 
