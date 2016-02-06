@@ -78,6 +78,16 @@ If `disable_cache` is set to `true`, the current time is added to the URL so tha
     npm install
     node index.js
 
+### Run it in a Docker container
+
+Checkout the repository and run the following to build the docker image:
+
+    docker build -t iot-proxy .
+
+You have to mount the `conf` directory to the docker container. Make sure to place a `server.json` and a `services.json` inside it.
+
+    docker run --rm --name iot-proxy -v /home/micky/iot-proxy/conf:/opt/iot-proxy/conf -p 2000:8000 iot-proxy
+
 ## Development
 
 The HTTP server is implemented using `node.js`.
@@ -88,4 +98,4 @@ Required setup:
 
 Run tests:
 
-  mocha
+    mocha
