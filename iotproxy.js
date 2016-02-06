@@ -6,33 +6,21 @@ var serviceRouter = require('./lib/ServiceRouter');
 
 exports = module.exports = {};
 
-exports.start = function(callbackWhenServerStarted) {
-  fs.readFile('conf/services.json', {encoding:'utf-8'}, function(error, data) {
-  	if(error) { console.log(error.message); return; }
-  
-  	var jsonData = JSON.parse(data);
-  	async.each(jsonData, function(service, callback) {
-      serviceRouter.addService(service);
-  
-      console.log("Registering " + service.endpoint.url + " to source " + service.source.url);
-  
-      callback()
-  	})
-  
-  
-    fs.readFile('conf/server.json', {encoding:'utf-8'}, function(error, data) {
-    	if(error) { console.log(error.message); return; }
-    
-      var serverConfig = JSON.parse(data)
-  
-      if(serverConfig.listen.https.enabled)
-        startSecureServerOnPort(serverConfig.listen.https.port);
-      if(serverConfig.listen.http.enabled)
-        startServerOnPort(serverConfig.listen.http.port);
-  
-      callbackWhenServerStarted();
-    })
-  });
+exports.start = function(callbackWhenServerStarted, serverConfig, servicesConfig) {
+  async.each(servicesConfig, function(service, asyncCallback) {
+    serviceRouter.addService(service);
+
+    console.log("Registering " + service.endpoint.url + " to source " + service.source.url);
+
+    asyncCallback();
+	});
+
+  if(serverConfig.listen.https.enabled)
+    startSecureServerOnPort(serverConfig.listen.https.port);
+  if(serverConfig.listen.http.enabled)
+    startServerOnPort(serverConfig.listen.http.port);
+
+  callbackWhenServerStarted();
 }
 
 function startSecureServerOnPort(port) {
