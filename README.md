@@ -71,6 +71,8 @@ Remember to put all services in an array (`[ ... ]`) in `conf/services.json`.
 - `method`, `GET` or `POST`. The HTTP method to use when calling the source. Note that this overwrites the proxied HTTP method. The IoT proxy is proxying the HTTP method, i.e. if you call the proxy using `POST`, the source will be called using `POST`. However, if this option is set, the specified method is used in any case.
 - `authentication`, object named either `basic` or `digest` having attributes `username` and `password`. Either basic or digest authentication is supported. See example below.
 
+#### Example Services
+
     [
       {
         "endpoint": {
