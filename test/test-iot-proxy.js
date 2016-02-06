@@ -10,12 +10,152 @@ chai.use(chaiHttp);
 
 var app = chai.request('http://localhost:8000');
 
+var serverConfig = 
+{
+  "listen": {
+    "http": {
+      "enabled": true
+    },
+    "https": {
+      "enabled": false
+    }
+  }
+};
+
+var servicesConfig = 
+[
+  {
+    "endpoint": {
+      "url": "/testserver"
+    },
+    "source": {
+      "url": "http://localhost:4000/"
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/weather",
+      "disable_cache": false
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/weather"
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/webcam"
+    },
+    "source": {
+      "url": "https://placehold.it/640x480?text=Webcam",
+      "method": "GET"
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/post_request"
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/post",
+      "method": "POST"
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/proxied_post_request"
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/post"
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/digest_auth_request"
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/auth/digest",
+      "authentication": {
+        "digest": {
+          "username": "testuser",
+          "password": "testpassword"
+        }
+      }
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/basic_auth_request"
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/auth/basic",
+      "authentication": {
+        "basic": {
+          "username": "testuser",
+          "password": "testpassword"
+        }
+      }
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/basic_auth_post_request"
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/auth/basic",
+      "authentication": {
+        "basic": {
+          "username": "testuser",
+          "password": "testpassword"
+        }
+      }
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/basic_auth_forced_post_request"
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/auth/basic",
+      "authentication": {
+        "basic": {
+          "username": "testuser",
+          "password": "testpassword"
+        }
+      },
+      "method": "POST"
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/basic_auth_request_disable_cache"
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/auth/basic/cache/disabled",
+      "authentication": {
+        "basic": {
+          "username": "testuser",
+          "password": "testpassword"
+        }
+      },
+      "disable_cache": true
+    }
+  },
+  {
+    "endpoint": {
+      "url": "/disable_cache"
+    },
+    "source": {
+      "url": "http://localhost:4000/testapis/cache/disabled",
+      "disable_cache": true
+    }
+  }
+];
+
 describe("iot-proxy", function() {
   before(function (done) {
     iotproxy.start(function() {
       testServer.startTestServerOnPort(4000);
       done();
-    });
+    }, serverConfig, servicesConfig);
   });
 
   describe(".start()", function() {
