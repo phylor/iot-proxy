@@ -32,12 +32,12 @@ Basic server settings can be configured in `conf/server.json`. Configuration of 
 
 ### Basic Server Setup
 
-Currently only either HTTP or HTTPS is supported (not simultaneously). The server can be strengthened with SSL client certificates.
+The IoT proxy can listen on HTTP or HTTPS (or both simultaneously). In the case of HTTPS, it is strengthened with SSL client certificates.
 
     {
       "listen": {
-        "http": true,
-        "https": false,
+        "http": { "enabled": true },
+        "https": { "enabled": false }
       },
       "authentication": {
         "ssl": {
@@ -50,13 +50,31 @@ Currently only either HTTP or HTTPS is supported (not simultaneously). The serve
 
 ### Service Setup
 
-If `disable_cache` is set to `true`, the current time is added to the URL so that the requests are not cached.
+Services are defined in `conf/services.json` as a JSON array. Each service consists of an `endpoint` defining how to access the IoT source on the proxy, and a `source` defining the source itself.
+
+Example of a service:
+
+    {
+      "endpoint": {
+        "url": "/weather"
+      },
+      "source": {
+        "url": "http://weather.com/NewYork.json",
+      }
+    }
+
+Remember to put all services in an array (`[ ... ]`) in `conf/services.json`.
+
+#### Options for IoT Sources
+
+- `disable_cache`, `true` or `false` (default `false`). If set to `true` the current time is added to the source URL so that requests are not cached.
+- `method`, `GET` or `POST`. The HTTP method to use when calling the source. Note that this overwrites the proxied HTTP method. The IoT proxy is proxying the HTTP method, i.e. if you call the proxy using `POST`, the source will be called using `POST`. However, if this option is set, the specified method is used in any case.
+- `authentication`, object named either `basic` or `digest` having attributes `username` and `password`. Either basic or digest authentication is supported. See example below.
 
     [
       {
         "endpoint": {
-          "url": "/weather",
-          "disable_cache": false
+          "url": "/weather"
         },
         "source": {
           "url": "http://weather.com/NewYork.json",
@@ -64,11 +82,25 @@ If `disable_cache` is set to `true`, the current time is added to the URL so tha
       },
       {
         "endpoint": {
-          "url": "/webcam",
-          "disable_cache": true
+          "url": "/webcam"
         },
         "source": {
-          "url": "https://iot1.example.com/image.jpg"
+          "url": "https://iot1.example.com/image.jpg",
+          "disable_cache": true
+        }
+      },
+      {
+        "endpoint": {
+          "url": "/digest_auth_request"
+        },
+        "source": {
+          "url": "http://localhost:4000/testapis/auth/digest",
+          "authentication": {
+            "digest": {
+              "username": "testuser",
+              "password": "testpassword"
+            }
+          }
         }
       }
     ]

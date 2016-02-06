@@ -34,8 +34,7 @@ var servicesConfig =
   },
   {
     "endpoint": {
-      "url": "/weather",
-      "disable_cache": false
+      "url": "/weather"
     },
     "source": {
       "url": "http://localhost:4000/testapis/weather"
