@@ -12,11 +12,11 @@ Assume you have three IoT sources:
 - Temperature sensor accessible at http://192.168.0.7/temperature.json
 - Weather information accessible at http://api.openweathermap.org/data/2.5/weather?q=London,uk
 
-With the IoT proxy you could map those sources to the following arbitrary URLs:
+With the IoT proxy you could map those sources to the following arbitrary URLs (assuming the IoT proxy runs on `example.com` on port 80):
 
-- /camera
-- /temperature
-- /weather
+- http://example.com/camera
+- http://example.com/temperature
+- http://example.com/weather
 
 Calling a mapped URL has the same effect as calling the source URL above. Basic or digest authentication of the sources can be configured in the proxy. They are not proxied, i.e. the proxy can be secured with a single authentication scheme, even if the sources use different authentication schemes or no authentication at all.
 
@@ -30,7 +30,7 @@ Calling a mapped URL has the same effect as calling the source URL above. Basic 
 
 Basic server settings can be configured in `conf/server.json`. Configuration of the different IoT-sources is done in the JSON configuration file called `conf/services.json`.
 
-### Basic Server Setup
+### Server Setup
 
 The IoT proxy can listen on HTTP or HTTPS (or both simultaneously). In the case of HTTPS, it is strengthened with SSL client certificates.
 
@@ -114,13 +114,9 @@ Remember to put all services in an array (`[ ... ]`) in `conf/services.json`.
 
 ### Run it in a Docker container
 
-Checkout the repository and run the following to build the docker image:
+You have to mount the `conf` directory to the docker container (substitute the path starting with `/home/micky/..` by the location of your `conf` directory). Make sure to place a `server.json` and a `services.json` inside it. The server is reachable at port `2000` (change it as you like).
 
-    docker build -t iot-proxy .
-
-You have to mount the `conf` directory to the docker container. Make sure to place a `server.json` and a `services.json` inside it.
-
-    docker run --rm --name iot-proxy -v /home/micky/iot-proxy/conf:/opt/iot-proxy/conf -p 2000:8000 iot-proxy
+    docker run --rm --name iot-proxy -v /home/micky/iot-proxy/conf:/opt/iot-proxy/conf -p 2000:8000 phylor/iot-proxy
 
 ## Development
 
