@@ -116,7 +116,7 @@ Remember to put all services in an array (`[ ... ]`) in `conf/services.json`.
 
 You have to mount the `conf` directory to the docker container (substitute the path starting with `/home/micky/..` by the location of your `conf` directory). Make sure to place a `server.json` and a `services.json` inside it. The server is reachable at port `2000` (change it as you like).
 
-    docker run --rm --name iot-proxy -v /home/micky/iot-proxy/conf:/opt/iot-proxy/conf -p 2000:8000 phylor/iot-proxy
+    docker run --name iot-proxy -v /home/micky/iot-proxy/conf:/opt/iot-proxy/conf -p 2000:8000 -d phylor/iot-proxy
 
 ## Development
 
